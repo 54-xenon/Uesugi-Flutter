@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // 上杉暗号の対応表をインポート
-import 'uesugi.dart';
+import 'model/uesugi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // 出力表示欄
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 width: double.infinity,
@@ -118,24 +118,38 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialButton(
                 onPressed: _selectedMode == Mode.encord
                     ? () {
-                        final encordResult = encord(_controller.text);
-                        setState(() {
-                          // 前の結果が残っている場合 -> 初期化する
-                          if (_outputText.isNotEmpty) {
-                            _outputText = "";
-                          }
-                          _outputText = encordResult.join(' ');
-                        });
+                        try {
+                          final encordResult = encord(_controller.text);
+                          setState(() {
+                            // 前の結果が残っている場合 -> 初期化する
+                            if (_outputText.isNotEmpty) {
+                              _outputText = "";
+                            }
+                            _outputText = encordResult.join(' ');
+                          });
+                        } on FormatException catch (e) {
+                          print("エラー: $e, ひらがなのみを入力して下さい");
+                        } catch (e) {
+                          print("エラー: $e");
+                        }
                       }
                     : () {
-                        final decordResult = decord(_controller.text);
-                        setState(() {
-                          // 結果を出力するWidgetの中身を更新する
-                          if (_outputText.isNotEmpty) {
-                            _outputText = "";
-                          }
-                          _outputText = decordResult.toString();
-                        });
+                        // 数字以外の文字列ならエラーにして実行しない
+                        try {
+                          final decordResult = decord(_controller.text);
+                          setState(() {
+                            // 結果を出力するWidgetの中身を更新する
+                            if (_outputText.isNotEmpty) {
+                              _outputText = "";
+                            }
+                            _outputText = decordResult.toString();
+                          });
+                        } on FormatException catch (e) {
+                          print("エラー: $e, 数字のみを入力して下さい");
+                          // これをsnackbarにする
+                        } catch (e) {
+                          print("エラー: $e");
+                        }
                       },
                 child: Container(
                   decoration: BoxDecoration(
