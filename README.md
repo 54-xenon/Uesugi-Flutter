@@ -22,6 +22,8 @@
 
 - **エンコード**：ひらがなの文章を数字の暗号文に変換
 - **デコード**：数字の暗号文をひらがなの文章に変換
+- 出力結果のワンタップコピー
+- ライト/ダークテーマに対応
 
 ## 動作環境
 
@@ -34,11 +36,21 @@ flutter pub get
 flutter run
 ```
 
-## プロジェクト構成
+## アーキテクチャ
+
+MVC（Model / View / Controller）で構成しています。
 
 ```
 lib/
-├── main.dart        # UIとエンコード/デコードのロジック
-└── model/
-    └── uesugi.dart   # 上杉暗号の対応表
+├── main.dart                    # エントリーポイント（MyApp / テーマ設定）
+├── model/
+│   └── uesugi.dart               # Model: 上杉暗号の対応表とエンコード/デコードのロジック
+├── Controller/
+│   └── cipher_controller.dart    # Controller: Modelを操作し、Viewに状態を通知(ChangeNotifier)
+└── screen/
+    └── home_screen.dart          # View: 入力/出力の表示とユーザー操作の受け付け
 ```
+
+- **Model**（`UesugiCipher`）：暗号表の定義と `encode` / `decode` の純粋なロジックのみを持つ
+- **Controller**（`CipherController`）：`ChangeNotifier` でモードや出力結果、エラーメッセージなどの状態を保持し、Modelを呼び出す
+- **View**（`HomeScreen`）：`ListenableBuilder` で Controller を監視し、UIの描画とユーザー入力の受け付けのみを行う
