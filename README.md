@@ -1,18 +1,44 @@
-# uesugicipher
+# uesugicipher（上杉暗号翻訳アプリ）
 
-A new Flutter project.
+戦国時代に上杉謙信が用いたと伝わる「上杉暗号」で、ひらがなの平文と数字の暗号文を相互に変換する Flutter アプリです。
 
-## Getting Started
+## 上杉暗号について
 
-This project is a starting point for a Flutter application.
+いろは47文字を7×7の表に並べ、各文字を「行番号・列番号」の2桁の数字に置き換える換字式暗号です。
 
-A few resources to get you started if this is your first Flutter project:
+```
+1行目: い ろ は に ほ へ と
+2行目: ち り ぬ る を わ か
+3行目: よ た れ そ つ ね な
+4行目: ら む う ゐ の お く
+5行目: や ま け ふ こ え て
+6行目: あ さ き ゆ め み し
+7行目: ゑ ひ も せ す ん （空白）
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+例：「い」→ `11`、「ろ」→ `12`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Uesugi-Flutter
+## 機能
+
+- **エンコード**：ひらがなの文章を数字の暗号文に変換
+- **デコード**：数字の暗号文をひらがなの文章に変換
+
+## 動作環境
+
+- Flutter SDK（Dart ^3.12.2）
+
+## セットアップ
+
+```bash
+flutter pub get
+flutter run
+```
+
+## プロジェクト構成
+
+```
+lib/
+├── main.dart        # UIとエンコード/デコードのロジック
+└── model/
+    └── uesugi.dart   # 上杉暗号の対応表
+```
